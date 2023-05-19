@@ -28,8 +28,6 @@ export default function Index() {
                   >
                     Try a prompt
                   </Link>
-                  <Link to="/dashboard">Dashboard</Link>{" "}
-                  <Link to="/notes">notes</Link>{" "}
                 </div>
               </div>
             </div>
