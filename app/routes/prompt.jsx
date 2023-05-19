@@ -2,6 +2,7 @@ import { json } from "@remix-run/node";
 import { Form, useActionData, useNavigation } from "@remix-run/react";
 import { OpenAI } from "langchain/llms/openai";
 import { PromptTemplate } from "langchain/prompts";
+import { LLMChain } from "langchain/chains";
 
 export async function action({ request }) {
   const model = new OpenAI({
@@ -15,11 +16,12 @@ export async function action({ request }) {
     inputVariables: ["product"],
   });
 
+  const chain = new LLMChain({ llm: model, prompt: prompt });
+
   const formData = await request.formData();
   const product = formData.get("product");
 
-  const promptText = await prompt.format({ product });
-  const res = await model.call(promptText);
+  const res = await chain.call({ product });
 
   return json({ result: res });
 }
@@ -30,7 +32,7 @@ export default function PromptPage() {
     navigation.state === "submitting" || navigation.state === "loading";
 
   const data = useActionData() || {};
-  let formattedResult = data?.result;
+  let formattedResult = data?.result?.text;
   if (formattedResult) {
     formattedResult = formattedResult.replaceAll("\n", "").trim();
   }
