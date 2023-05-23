@@ -1,30 +1,4 @@
-import { json } from "@remix-run/node";
 import { Outlet } from "@remix-run/react";
-import { OpenAI } from "langchain/llms/openai";
-import { PromptTemplate } from "langchain/prompts";
-import { LLMChain } from "langchain/chains";
-
-export async function action({ request }) {
-  const model = new OpenAI({
-    temperature: 0.7,
-  });
-
-  const template =
-    "What would be a good company name for a company that makes {product}?";
-  const prompt = new PromptTemplate({
-    template,
-    inputVariables: ["product"],
-  });
-
-  const chain = new LLMChain({ llm: model, prompt: prompt });
-
-  const formData = await request.formData();
-  const product = formData.get("product");
-
-  const res = await chain.call({ product });
-
-  return json({ result: res });
-}
 
 export default function PromptPage() {
   return (
