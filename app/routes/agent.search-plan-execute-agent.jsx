@@ -1,13 +1,15 @@
 import { json } from "@remix-run/node";
 import { Form, Link, useNavigation, useActionData } from "@remix-run/react";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
-import { OpenAI } from "langchain/llms/openai";
+import { ChatOpenAI } from "langchain/chat_models/openai";
 import { SerpAPI } from "langchain/tools";
 import { Calculator } from "langchain/tools/calculator";
+import { PlanAndExecuteAgentExecutor } from "langchain/experimental/plan_and_execute";
 
 export async function action({ request }) {
-  const model = new OpenAI({
-    temperature: 0,
+  const model = new ChatOpenAI({
+    temperature: 0.4,
+    verbose: true,
   });
   const tools = [
     new SerpAPI(process.env.SERPAPI_API_KEY, {
@@ -17,8 +19,10 @@ export async function action({ request }) {
     }),
     new Calculator(),
   ];
-  const executor = await initializeAgentExecutorWithOptions(tools, model, {
-    agentType: "zero-shot-react-description",
+  // Uses a LOT of tokens
+  const executor = await PlanAndExecuteAgentExecutor.fromLLMAndTools({
+    llm: model,
+    tools,
   });
   console.log("Loaded agent");
   const formData = await request.formData();
@@ -30,7 +34,7 @@ export async function action({ request }) {
   return json({ result: res?.output });
 }
 
-export default function SearchActionAgentForm() {
+export default function SearchPlanExecuteAgentForm() {
   const navigation = useNavigation();
   const showLoading =
     navigation.state === "submitting" || navigation.state === "loading";
@@ -43,7 +47,8 @@ export default function SearchActionAgentForm() {
 
   return (
     <div>
-      <h2 className="pb-4 text-xl">Search-enabled action agent</h2>
+      <h2 className="pb-4 text-xl">Search-enabled plan and execute agent</h2>
+      <h2 className="pb-4 text-xl text-red-500">Uses lots of tokens</h2>
       <h2 className="pb-4 text-xl">Enter a question.</h2>
       <Form method="post" className="space-y-6 py-4">
         <div>

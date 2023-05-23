@@ -14,6 +14,14 @@ export default function AgentOptions() {
               • Search-enabled action agent
             </Link>
           </li>
+          <li>
+            <Link
+              className="hover:text-green-500"
+              to="/agent/search-plan-execute-agent"
+            >
+              • Search-enabled plan and execute agent
+            </Link>
+          </li>
         </ul>
       </div>
       <Link
