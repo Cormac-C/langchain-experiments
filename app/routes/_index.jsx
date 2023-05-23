@@ -1,6 +1,6 @@
 import { Link } from "@remix-run/react";
 
-export const meta = () => [{ title: "Remix Notes" }];
+export const meta = () => [{ title: "Langchain" }];
 
 export default function Index() {
   return (
