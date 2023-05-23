@@ -1,19 +1,35 @@
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
 import { OpenAI } from "langchain/llms/openai";
-import { BufferMemory } from "langchain/memory";
+import { ChatMessageHistory, BufferMemory } from "langchain/memory";
 import { ConversationChain } from "langchain/chains";
-import { Session } from "@remix-run/node";
+
+import { getSession, commitSession } from "../sessions";
+import { AIChatMessage, HumanChatMessage } from "langchain/schema";
 
 // Source: https://js.langchain.com/docs/getting-started/guide-llm#memory-add-state-to-chains-and-agents
 
 export async function action({ request }) {
-  // TODO: handle the model somewhere where it isn't re-instantiated with every request
-  console.log("Loading model...");
+  const session = await getSession(request.headers.get("Cookie"));
+  let existingMemory = [];
+  if (session.has("memory")) {
+    existingMemory = session.get("memory");
+  }
+
   const model = new OpenAI({
     temperature: 0,
   });
-  const memory = new BufferMemory();
+  // TODO move this parsing into a separate function
+  const messageHistory = existingMemory?.messages || [];
+  let parsedMessageHistory = messageHistory.map((message) => {
+    return message.type === "human"
+      ? new HumanChatMessage(message.data.content)
+      : new AIChatMessage(message.data.content);
+  });
+
+  const memory = new BufferMemory({
+    chatHistory: new ChatMessageHistory(parsedMessageHistory),
+  });
 
   const chain = new ConversationChain({ llm: model, memory: memory });
 
@@ -21,9 +37,17 @@ export async function action({ request }) {
   const input = formData.get("input");
 
   const res = await chain.call({ input });
-  console.log("Got result: ", res);
 
-  return json({ result: res?.response });
+  session.set("memory", memory.chatHistory);
+
+  return json(
+    { result: res?.response },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 }
 
 export default function StatefulLLMForm() {
