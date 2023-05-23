@@ -7,8 +7,11 @@ export default function AgentOptions() {
         <h1 className="pb-4 text-lg">Choose an agent:</h1>
         <ul className="space-y-4">
           <li>
-            <Link className="hover:text-green-500" to="/agent/search">
-              • Search-enabled
+            <Link
+              className="hover:text-green-500"
+              to="/agent/search-action-agent"
+            >
+              • Search-enabled action agent
             </Link>
           </li>
         </ul>

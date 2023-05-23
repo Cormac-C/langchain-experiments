@@ -43,6 +43,7 @@ export default function SearchAgentForm() {
 
   return (
     <div>
+      <h2 className="pb-4 text-xl">Search-enabled action agent</h2>
       <h2 className="pb-4 text-xl">Enter a question.</h2>
       <Form method="post" className="space-y-6 py-4">
         <div>
@@ -53,9 +54,10 @@ export default function SearchAgentForm() {
             Question
           </label>
           <div className="mt-1">
-            <input
+            <textarea
               id="question"
               required
+              rows={4}
               name="question"
               type="text"
               className="bg-whitepx-2 w-full rounded border border-gray-500 bg-green-100 py-1 text-lg"
