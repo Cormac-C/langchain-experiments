@@ -80,7 +80,7 @@ export default function CompanyPromptForm() {
         <button
           disabled={showLoading}
           type="submit"
-          className="w-full rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600 focus:bg-blue-400"
+          className="w-full rounded bg-purple-500 px-4 py-2 text-white hover:bg-purple-800 focus:bg-purple-400"
         >
           {showLoading ? "Submitting..." : "Submit"}
         </button>
@@ -98,7 +98,7 @@ export default function CompanyPromptForm() {
       </div>
       <Link
         to="/prompt"
-        className="flex items-center justify-center rounded-md border border-transparent bg-[color:rgba(209,190,230,0.9)] px-4 py-3 text-base font-medium text-purple-700 shadow-sm hover:bg-purple-50 sm:px-8"
+        className="flex items-center justify-center rounded-md border border-purple-800 bg-[color:rgba(209,190,230,0.9)] px-4 py-3 text-base font-medium text-purple-700 shadow-sm hover:bg-purple-300 sm:px-8"
       >
         Back
       </Link>
