@@ -49,8 +49,10 @@ export default function SearchPlanExecuteAgentForm() {
   return (
     <div>
       <h2 className="pb-4 text-xl">Search-enabled plan and execute agent</h2>
-      <h2 className="pb-4 text-xl text-red-500">Uses lots of tokens</h2>
       <h2 className="pb-4 text-xl">Enter a question.</h2>
+      <span className="text-md pb-4 text-red-500">
+        Warning: Uses lots of tokens!!!
+      </span>
       <Form method="post" className="space-y-6 py-4">
         <div>
           <label

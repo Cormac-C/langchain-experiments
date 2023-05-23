@@ -26,7 +26,7 @@ export default function AgentOptions() {
       </div>
       <Link
         to="/"
-        className="flex items-center justify-center rounded-md border border-transparent bg-green-200 px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-300 sm:px-8"
+        className="flex items-center justify-center rounded-md border border-transparent bg-green-300 px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-300 sm:px-8"
       >
         Return to home
       </Link>

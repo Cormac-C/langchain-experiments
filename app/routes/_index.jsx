@@ -21,7 +21,7 @@ export default function Index() {
                 <div className="space-y-4 sm:mx-auto sm:space-y-0">
                   <Link
                     to="/prompt"
-                    className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-sm hover:bg-yellow-50 sm:px-8"
+                    className="flex items-center justify-center rounded-md border border-purple-400 bg-white px-4 py-3 text-base font-medium text-purple-700 shadow-sm hover:bg-purple-50 sm:px-8"
                   >
                     Try a prompt
                   </Link>
@@ -29,9 +29,17 @@ export default function Index() {
                 <div className="space-y-4 sm:mx-auto sm:space-y-0">
                   <Link
                     to="/agent"
-                    className="flex items-center justify-center rounded-md border border-transparent bg-white px-4 py-3 text-base font-medium text-yellow-700 shadow-sm hover:bg-yellow-50 sm:px-8"
+                    className="flex items-center justify-center rounded-md border border-green-400 bg-white px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-50 sm:px-8"
                   >
                     Try an agent
+                  </Link>
+                </div>
+                <div className="space-y-4 sm:mx-auto sm:space-y-0">
+                  <Link
+                    to="/chat"
+                    className="flex items-center justify-center rounded-md border border-blue-400 bg-white px-4 py-3 text-base font-medium text-blue-700 shadow-sm hover:bg-blue-50 sm:px-8"
+                  >
+                    Try a chatbot
                   </Link>
                 </div>
               </div>
