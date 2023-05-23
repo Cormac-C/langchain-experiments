@@ -5,6 +5,8 @@ import { OpenAI } from "langchain/llms/openai";
 import { SerpAPI } from "langchain/tools";
 import { Calculator } from "langchain/tools/calculator";
 
+// Source: https://js.langchain.com/docs/getting-started/guide-llm#agents-dynamically-run-chains-based-on-user-input
+
 export async function action({ request }) {
   const model = new OpenAI({
     temperature: 0,

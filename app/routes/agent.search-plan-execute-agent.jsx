@@ -1,10 +1,11 @@
 import { json } from "@remix-run/node";
 import { Form, Link, useNavigation, useActionData } from "@remix-run/react";
-import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { SerpAPI } from "langchain/tools";
 import { Calculator } from "langchain/tools/calculator";
 import { PlanAndExecuteAgentExecutor } from "langchain/experimental/plan_and_execute";
+
+//Source: https://js.langchain.com/docs/modules/agents/agents/plan_execute/
 
 export async function action({ request }) {
   const model = new ChatOpenAI({

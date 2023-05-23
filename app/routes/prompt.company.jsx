@@ -4,6 +4,8 @@ import { OpenAI } from "langchain/llms/openai";
 import { PromptTemplate } from "langchain/prompts";
 import { LLMChain } from "langchain/chains";
 
+// Source: https://js.langchain.com/docs/modules/chains/llm_chain
+
 export async function action({ request }) {
   const model = new OpenAI({
     temperature: 0.7,
