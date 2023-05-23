@@ -10,7 +10,7 @@ export async function action({ request }) {
   });
 
   const template =
-    "Translate the following phrase into {language}: ```{phrase}```";
+    "Translate the following phrase into {language}: ```{phrase}```. If you don't know the language, say so.";
   const prompt = new PromptTemplate({
     template,
     inputVariables: ["language", "phrase"],
