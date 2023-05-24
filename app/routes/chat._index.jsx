@@ -12,10 +12,7 @@ export default function ChatOptions() {
             </Link>
           </li>
           <li>
-            <Link
-              className="pointer-events-none text-gray-500 hover:text-blue-500"
-              to="/chat/chat-model-basic"
-            >
+            <Link className="hover:text-blue-500" to="/chat/chat-model-basic">
               • Chat model
             </Link>
           </li>
