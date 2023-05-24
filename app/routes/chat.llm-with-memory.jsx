@@ -41,7 +41,7 @@ export async function action({ request }) {
   session.set("memory", memory.chatHistory);
 
   return json(
-    { result: res?.response },
+    { result: res?.response, memory: memory.chatHistory },
     {
       headers: {
         "Set-Cookie": await commitSession(session),
@@ -57,14 +57,36 @@ export default function StatefulLLMForm() {
     navigation.state === "submitting" || navigation.state === "loading";
 
   const data = useActionData() || {};
+  const memory = data?.memory;
+  let formattedConversation = "";
+  if (memory) {
+    memory.messages.forEach((message) => {
+      formattedConversation += `${message.type}: ${message.data.content
+        .replaceAll("\n", "")
+        .trim()}\n`;
+    });
+  }
   let formattedResult = data?.result;
   if (formattedResult) {
     formattedResult = formattedResult.replaceAll("\n", "").trim();
   }
 
+  // TODO: Colour code the messages by speaker
+  // TODO: Add a button to clear the conversation history
   return (
     <div>
       <h2 className="pb-4 text-xl">Interact with the Chatbot.</h2>
+      <label className="block text-sm font-medium text-gray-700">Output</label>
+      <div className="mt-1">
+        <textarea
+          id="output"
+          name="output"
+          className="w-full rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
+          rows={8}
+          readOnly
+          value={formattedConversation || ""}
+        />
+      </div>
       <Form method="post" className="space-y-6 py-4">
         <div>
           <label
@@ -91,17 +113,7 @@ export default function StatefulLLMForm() {
           {showLoading ? "Submitting..." : "Submit"}
         </button>
       </Form>
-      <label className="block text-sm font-medium text-gray-700">Output</label>
-      <div className="mt-1">
-        <textarea
-          id="output"
-          name="output"
-          className="w-full rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
-          rows={4}
-          readOnly
-          value={formattedResult || ""}
-        />
-      </div>
+
       <Link
         to="/chat"
         className="flex items-center justify-center rounded-md border border-blue-800 bg-blue-200 px-4 py-3 text-base font-medium text-blue-700 shadow-sm hover:bg-blue-300 sm:px-8"
