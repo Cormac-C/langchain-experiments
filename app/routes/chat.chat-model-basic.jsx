@@ -96,10 +96,6 @@ export default function ChatModelForm() {
         .trim()}\n`;
     });
   }
-  let formattedResult = data?.result;
-  if (formattedResult) {
-    formattedResult = formattedResult.trim();
-  }
 
   useEffect(() => {
     if (formRef.current) {
