@@ -1,5 +1,11 @@
 import { json } from "@remix-run/node";
-import { Form, Link, useActionData, useNavigation } from "@remix-run/react";
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from "@remix-run/react";
 import { OpenAI } from "langchain/llms/openai";
 import { ChatMessageHistory, BufferMemory } from "langchain/memory";
 import { ConversationChain } from "langchain/chains";
@@ -8,6 +14,15 @@ import { getSession, commitSession } from "../sessions";
 import { AIChatMessage, HumanChatMessage } from "langchain/schema";
 
 // Source: https://js.langchain.com/docs/getting-started/guide-llm#memory-add-state-to-chains-and-agents
+
+export async function loader({ request }) {
+  const session = await getSession(request.headers.get("Cookie"));
+  let existingMemory = [];
+  if (session.has("memory")) {
+    existingMemory = session.get("memory");
+  }
+  return json({ memory: existingMemory });
+}
 
 export async function action({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
@@ -56,7 +71,7 @@ export default function StatefulLLMForm() {
   const showLoading =
     navigation.state === "submitting" || navigation.state === "loading";
 
-  const data = useActionData() || {};
+  const data = useActionData() || useLoaderData();
   const memory = data?.memory;
   let formattedConversation = "";
   if (memory) {
