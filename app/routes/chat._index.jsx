@@ -16,6 +16,11 @@ export default function ChatOptions() {
               • Chat model
             </Link>
           </li>
+          <li>
+            <Link className="hover:text-blue-500" to="/chat/chat-convo-summary">
+              • Chat model with summary memory
+            </Link>
+          </li>
         </ul>
       </div>
       <Link
