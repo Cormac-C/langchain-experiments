@@ -9,8 +9,8 @@ export default function PromptPage() {
             <div className="absolute inset-0 bg-[color:rgba(126,81,166,0.5)] mix-blend-multiply" />
           </div>
 
-          <div className="relative mx-auto w-full max-w-lg px-4 pb-4 pt-8 sm:px-6 lg:px-16 lg:pb-8 lg:pt-12">
-            <h2 className="pb-4 text-center text-6xl font-extrabold tracking-tight">
+          <div className="relative mx-auto w-full max-w-xl px-4 pb-4 pt-8 sm:px-6 lg:px-16 lg:pb-8 lg:pt-12">
+            <h2 className="px-16 pb-4 text-center text-6xl font-extrabold tracking-tight">
               <span className="block uppercase text-purple-500 drop-shadow-md">
                 LLM Chain
               </span>
