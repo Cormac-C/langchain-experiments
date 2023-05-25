@@ -43,6 +43,16 @@ export default function Index() {
                   </Link>
                 </div>
               </div>
+              <div className="mx-auto mt-10 max-w-sm sm:flex sm:max-w-none sm:justify-center">
+                <div className="space-y-4 sm:mx-auto sm:space-y-0">
+                  <Link
+                    to="/document"
+                    className="flex items-center justify-center rounded-md border border-red-400 bg-white px-4 py-3 text-base font-medium text-red-700 shadow-sm hover:bg-red-50 sm:px-8"
+                  >
+                    Try a document
+                  </Link>
+                </div>
+              </div>
             </div>
           </div>
         </div>

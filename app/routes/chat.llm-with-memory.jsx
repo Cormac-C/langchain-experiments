@@ -47,7 +47,6 @@ export async function action({ request }) {
     const model = new OpenAI({
       temperature: 0.5,
     });
-    // TODO move this parsing into a separate function
     const messageHistory = existingMemory?.messages || [];
     let parsedMessageHistory = messageHistory.map((message) => {
       return message.type === "human"
