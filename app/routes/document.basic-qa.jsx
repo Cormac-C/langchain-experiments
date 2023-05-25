@@ -59,7 +59,7 @@ export async function action({ request }) {
   });
   console.log(res, "res");
 
-  return json({ result: res?.output });
+  return json({ result: res?.text });
 }
 
 export default function DocumentQAForm() {
@@ -104,7 +104,7 @@ export default function DocumentQAForm() {
             <textarea
               id="question"
               required
-              rows={4}
+              rows={2}
               name="question"
               type="text"
               className="bg-whitepx-2 w-full rounded border border-gray-500 bg-red-100 py-1 text-lg"
@@ -124,7 +124,7 @@ export default function DocumentQAForm() {
           id="output"
           name="output"
           className="w-full rounded border border-gray-500 bg-red-100 px-2 py-1 text-lg"
-          rows={4}
+          rows={8}
           readOnly
           value={formattedResult || ""}
         />
