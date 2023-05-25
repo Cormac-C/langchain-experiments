@@ -25,19 +25,23 @@ export async function loader({ request }) {
   return json({ memory: existingMemory });
 }
 
+async function clearSession(session) {
+  session.set("memory-1", { messages: [] });
+  return json(
+    { result: "", memory: [] },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
+}
+
 export async function action({ request }) {
   const formData = await request.formData();
   const session = await getSession(request.headers.get("Cookie"));
   if (formData.get("intent") === "clear") {
-    session.set("memory-1", { messages: [] });
-    return json(
-      { result: "", memory: [] },
-      {
-        headers: {
-          "Set-Cookie": await commitSession(session),
-        },
-      }
-    );
+    return clearSession(session);
   } else {
     let existingMemory = [];
     if (session.has("memory-1")) {
@@ -47,7 +51,7 @@ export async function action({ request }) {
     const chatModel = new ChatOpenAI({
       temperature: 0.3,
     });
-    // TODO move this parsing into a separate function
+
     const messageHistory = existingMemory?.messages || [];
     let parsedMessageHistory = messageHistory.map((message) => {
       return message.type === "human"
@@ -88,12 +92,14 @@ export default function ChatModelForm() {
 
   const data = useActionData() || useLoaderData();
   const memory = data?.memory;
-  let formattedConversation = "";
+  let conversationArray = [];
   if (memory?.messages) {
-    memory.messages.forEach((message) => {
-      formattedConversation += `${message.type}: ${message.data.content
-        .replaceAll("\n", "")
-        .trim()}\n`;
+    conversationArray = memory.messages.map((message) => {
+      const styling = message.type === "human" ? "black" : "blue";
+      return `
+      <span style="color: ${styling}">
+        ${message.type}: ${message.data.content.trim()}
+      </span>`;
     });
   }
 
@@ -111,21 +117,17 @@ export default function ChatModelForm() {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, [showLoading]);
-  // TODO: Colour code the messages by speaker
   return (
     <div>
       <h2 className="pb-4 text-xl">Interact with the Chatbot.</h2>
       <label className="block text-sm font-medium text-gray-700">Output</label>
-      <div className="mt-1">
-        <textarea
-          id="output"
-          name="output"
-          ref={outputRef}
-          className="w-full rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
-          rows={8}
-          readOnly
-          value={formattedConversation || ""}
-        />
+      <div
+        className="mt-1 max-h-64 min-h-[8rem] w-full overflow-y-scroll rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
+        ref={outputRef}
+      >
+        {conversationArray.map((message) => {
+          return <div dangerouslySetInnerHTML={{ __html: message }} />;
+        })}
       </div>
       <Form method="post" className="space-y-6 py-4" ref={formRef}>
         <div>
