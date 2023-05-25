@@ -88,14 +88,17 @@ export default function StatefulLLMForm() {
 
   const data = useActionData() || useLoaderData();
   const memory = data?.memory;
-  let formattedConversation = "";
+  let conversationArray = [];
   if (memory?.messages) {
-    memory.messages.forEach((message) => {
-      formattedConversation += `${message.type}: ${message.data.content
-        .replaceAll("\n", "")
-        .trim()}\n`;
+    conversationArray = memory.messages.map((message) => {
+      const styling = message.type === "human" ? "black" : "blue";
+      return `
+      <span style="color: ${styling}">
+        ${message.type}: ${message.data.content.trim()}
+      </span>`;
     });
   }
+
   let formattedResult = data?.result;
   if (formattedResult) {
     formattedResult = formattedResult.trim();
@@ -115,21 +118,19 @@ export default function StatefulLLMForm() {
       outputRef.current.scrollTop = outputRef.current.scrollHeight;
     }
   }, [showLoading]);
-  // TODO: Colour code the messages by speaker
+
   return (
     <div>
       <h2 className="pb-4 text-xl">Interact with the Chatbot.</h2>
       <label className="block text-sm font-medium text-gray-700">Output</label>
-      <div className="mt-1">
-        <textarea
-          id="output"
-          name="output"
-          ref={outputRef}
-          className="w-full rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
-          rows={8}
-          readOnly
-          value={formattedConversation || ""}
-        />
+
+      <div
+        className="mt-1 max-h-64 min-h-[8rem] w-full overflow-y-scroll rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
+        ref={outputRef}
+      >
+        {conversationArray.map((message) => {
+          return <div dangerouslySetInnerHTML={{ __html: message }} />;
+        })}
       </div>
       <Form method="post" className="space-y-6 py-4" ref={formRef}>
         <div>
