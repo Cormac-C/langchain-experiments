@@ -8,10 +8,10 @@ import {
 import { Link, Form, useNavigation, useActionData } from "@remix-run/react";
 import * as fs from "fs";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
-import { OpenAI } from "langchain/llms/openai";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RetrievalQAChain } from "langchain/chains";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
+import { ChatOpenAI } from "langchain/chat_models/openai";
 
 // Source: https://js.langchain.com/docs/modules/chains/index_related_chains/retrieval_qa
 
@@ -30,10 +30,10 @@ export async function loader({ request }) {
 }
 
 export async function action({ request }) {
-  const model = new OpenAI({});
+  const chatModel = new ChatOpenAI();
 
-  console.log(request, "request");
-
+  // Kind of convoluted to get the file from the form
+  // https://github.com/remix-run/remix/issues/3238
   const formData = await unstable_parseMultipartFormData(
     request,
     uploadHandler
@@ -48,7 +48,7 @@ export async function action({ request }) {
   // In-memory vector store https://www.npmjs.com/package/hnswlib-node
   const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
-  const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
+  const chain = RetrievalQAChain.fromLLM(chatModel, vectorStore.asRetriever());
 
   const question = formData.get("question");
 
