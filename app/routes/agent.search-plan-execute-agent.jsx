@@ -93,7 +93,7 @@ export default function SearchPlanExecuteAgentForm() {
       </div>
       <Link
         to="/agent"
-        className="flex items-center justify-center rounded-md border border-transparent bg-green-200 px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-50 sm:px-8"
+        className="flex items-center justify-center rounded-md border border-green-700 bg-green-200 px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-300 sm:px-8"
       >
         Back
       </Link>

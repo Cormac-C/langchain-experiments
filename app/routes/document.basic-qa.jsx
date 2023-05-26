@@ -203,7 +203,7 @@ export default function DocumentQAForm() {
       </div>
       <Link
         to="/document"
-        className="flex items-center justify-center rounded-md border border-transparent bg-red-200 px-4 py-3 text-base font-medium text-red-700 shadow-sm hover:bg-red-50 sm:px-8"
+        className="flex items-center justify-center rounded-md border border-red-700 bg-red-200 px-4 py-3 text-base font-medium text-red-700 shadow-sm hover:bg-red-300 sm:px-8"
       >
         Back
       </Link>
