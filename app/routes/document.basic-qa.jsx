@@ -5,32 +5,46 @@ import {
   unstable_createMemoryUploadHandler,
   unstable_parseMultipartFormData,
 } from "@remix-run/node";
-import { Link, Form, useNavigation, useActionData } from "@remix-run/react";
+import {
+  Link,
+  Form,
+  useNavigation,
+  useActionData,
+  useLoaderData,
+} from "@remix-run/react";
 import * as fs from "fs";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { RetrievalQAChain } from "langchain/chains";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
 import { ChatOpenAI } from "langchain/chat_models/openai";
+import { getSession, commitSession } from "../sessions";
 
 // Source: https://js.langchain.com/docs/modules/chains/index_related_chains/retrieval_qa
 
-export const uploadHandler = unstable_composeUploadHandlers(
-  unstable_createFileUploadHandler({
-    avoidFileConflicts: true,
-    directory: "/tmp",
-    file: ({ filename }) => filename,
-    maxPartSize: 5_000_000,
-  }),
-  unstable_createMemoryUploadHandler()
-);
-
 export async function loader({ request }) {
-  return json({ result: "" });
+  const session = await getSession(request.headers.get("Cookie"));
+  let sessionData = [];
+  if (session.has("memory-3")) {
+    sessionData = session.get("memory-3");
+  }
+  return json({ sessionData: sessionData });
 }
 
 export async function action({ request }) {
+  const session = await getSession(request.headers.get("Cookie"));
+
   const chatModel = new ChatOpenAI();
+
+  const uploadHandler = unstable_composeUploadHandlers(
+    unstable_createFileUploadHandler({
+      avoidFileConflicts: true,
+      directory: "/tmp",
+      file: ({ filename }) => filename,
+      maxPartSize: 5_000_000,
+    }),
+    unstable_createMemoryUploadHandler()
+  );
 
   // Kind of convoluted to get the file from the form
   // https://github.com/remix-run/remix/issues/3238
@@ -40,13 +54,44 @@ export async function action({ request }) {
   );
   const file = formData.get("file");
 
-  const text = fs.readFileSync(file.filepath, "utf8");
-  const textSplitter = new RecursiveCharacterTextSplitter({ chunkSize: 1000 });
-  const docs = await textSplitter.createDocuments([text]);
+  let vectorStore;
+  if (!file.name && session.has("memory-3")) {
+    // Shouldn't happen currently
+    const sessionData = session.get("memory-3");
+    const fileName = sessionData.file.name;
+    const slicedFileName = fileName.slice(0, fileName.length - 4);
+    const directory =
+      process.env.HOME + "/langchain-exp/app/sessions/" + slicedFileName;
+    console.log(directory, "directory");
 
-  // TODO: Vector store should be persisted somewhere
-  // In-memory vector store https://www.npmjs.com/package/hnswlib-node
-  const vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
+    // Use the current vector store
+    vectorStore = await HNSWLib.load(directory, new OpenAIEmbeddings());
+    console.log("Vector store loaded.");
+  } else if (file.name) {
+    const fileName = file.name;
+    const slicedFileName = fileName.slice(0, fileName.length - 4);
+    const directory =
+      process.env.HOME + "/langchain-exp/app/sessions/" + slicedFileName;
+    console.log(directory, "directory");
+
+    //Need to create the vector store
+    const text = fs.readFileSync(file.filepath, "utf8");
+    const textSplitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 1000,
+    });
+    const docs = await textSplitter.createDocuments([text]);
+
+    // In-memory vector store https://www.npmjs.com/package/hnswlib-node
+    vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
+
+    // TODO: Vector store should be persisted somewhere
+    // Saving like this messes everything up
+    // await vectorStore.save(directory);
+    console.log("New vector store created.");
+  } else {
+    console.log("No file uploaded.");
+    return json({ result: "No file uploaded." });
+  }
 
   const chain = RetrievalQAChain.fromLLM(chatModel, vectorStore.asRetriever());
 
@@ -59,7 +104,30 @@ export async function action({ request }) {
   });
   console.log(res, "res");
 
-  return json({ result: res?.text });
+  const fileFormatted = {
+    lastModified: file.lastModified,
+    webkitRelativePath: file.webkitRelativePath,
+    filepath: file.filepath,
+    name: file.name,
+    type: file.type,
+  };
+
+  const sessionInfo = {
+    file: fileFormatted,
+    question: question,
+    result: res?.text,
+  };
+
+  session.set("memory-3", sessionInfo);
+
+  return json(
+    { result: res?.text },
+    {
+      headers: {
+        "Set-Cookie": await commitSession(session),
+      },
+    }
+  );
 }
 
 export default function DocumentQAForm() {
@@ -67,7 +135,7 @@ export default function DocumentQAForm() {
   const showLoading =
     navigation.state === "submitting" || navigation.state === "loading";
 
-  const data = useActionData() || {};
+  const data = useActionData() || useLoaderData().sessionData;
   let formattedResult = data?.result;
   if (formattedResult) {
     formattedResult = formattedResult.trim();
@@ -90,7 +158,10 @@ export default function DocumentQAForm() {
             File
           </label>
           <div className="mt-1">
-            <input id="file" required name="file" type="file" accept=".txt" />
+            <input id="file" name="file" type="file" accept=".txt" required />
+            <p className="mt-2 text-sm text-gray-500">
+              Current vector store: {data?.file?.name}
+            </p>
           </div>
         </div>
         <div>
@@ -105,6 +176,7 @@ export default function DocumentQAForm() {
               id="question"
               required
               rows={2}
+              defaultValue={data?.question || ""}
               name="question"
               type="text"
               className="bg-whitepx-2 w-full rounded border border-gray-500 bg-red-100 py-1 text-lg"
