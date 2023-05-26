@@ -44,6 +44,14 @@ export default function CompanyPromptForm() {
       <h2 className="pb-4 text-xl">
         Enter a language and phrase, receive a translation.
       </h2>
+      <div className="text-md pb-2 text-gray-700">
+        <span className="font-bold">Actual prompt: </span>
+        {`Translate the following phrase into {language}: ` +
+          "```" +
+          `{phrase}` +
+          "```" +
+          `. If you don't know the language, say so.`}
+      </div>
       <Form method="post" className="space-y-6 py-4">
         <div>
           <label

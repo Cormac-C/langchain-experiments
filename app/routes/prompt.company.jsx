@@ -41,6 +41,11 @@ export default function CompanyPromptForm() {
   return (
     <div>
       <h2 className="pb-4 text-xl">Enter a product, receive a company name.</h2>
+      <div className="text-md pb-2 text-gray-700">
+        <span className="font-bold">Actual prompt: </span>
+        {`"What would be a good company name for a company that
+        makes {product}?`}
+      </div>
       <Form method="post" className="space-y-6 py-4">
         <div>
           <label
