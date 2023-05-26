@@ -22,6 +22,7 @@ import { getSession, commitSession } from "../sessions";
 
 // Source: https://js.langchain.com/docs/modules/chains/index_related_chains/retrieval_qa
 
+//TODO: Separate out file upload and embedding, with save, into a separate route
 export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
   let sessionData = [];
