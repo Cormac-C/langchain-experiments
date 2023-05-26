@@ -1,10 +1,12 @@
-import { createCookieSessionStorage } from "@remix-run/node";
+import { createCookie, createFileSessionStorage } from "@remix-run/node";
 
-const { getSession, commitSession, destroySession } =
-  createCookieSessionStorage({
-    cookie: {
-      name: "__session",
-    },
-  });
+const sessionCookie = createCookie("__session", {
+  sameSite: true,
+});
+
+const { getSession, commitSession, destroySession } = createFileSessionStorage({
+  dir: process.env.HOME + "/langchain-exp/app/sessions",
+  cookie: sessionCookie,
+});
 
 export { getSession, commitSession, destroySession };
