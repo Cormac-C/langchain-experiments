@@ -1,6 +1,5 @@
 import { Link } from "@remix-run/react";
 
-// TODO: Add conversational doc QA
 export default function DocumentOptions() {
   return (
     <div>

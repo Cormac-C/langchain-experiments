@@ -10,7 +10,7 @@ import {
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
-import { ChatMessageHistory, BufferMemory } from "langchain/memory";
+import { ChatMessageHistory } from "langchain/memory";
 import { ConversationalRetrievalQAChain } from "langchain/chains";
 
 import { getSession, commitSession } from "../sessions";
