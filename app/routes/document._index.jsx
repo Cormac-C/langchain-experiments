@@ -23,6 +23,14 @@ export default function DocumentOptions() {
               • Document QA
             </Link>
           </li>
+          <li>
+            <Link
+              className="text-red-700 hover:text-red-500"
+              to="/document/conversational-qa"
+            >
+              • Conversational Document QA
+            </Link>
+          </li>
         </ul>
       </div>
       <Link
