@@ -16,11 +16,13 @@ import { AIChatMessage, HumanChatMessage } from "langchain/schema";
 
 // Source: https://js.langchain.com/docs/getting-started/guide-llm#memory-add-state-to-chains-and-agents
 
+const SESSION_MEMORY_KEY = "memory";
+
 export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
   let existingMemory = [];
-  if (session.has("memory")) {
-    existingMemory = session.get("memory");
+  if (session.has(SESSION_MEMORY_KEY)) {
+    existingMemory = session.get(SESSION_MEMORY_KEY);
   }
   return json({ memory: existingMemory });
 }
@@ -29,7 +31,7 @@ export async function action({ request }) {
   const formData = await request.formData();
   const session = await getSession(request.headers.get("Cookie"));
   if (formData.get("intent") === "clear") {
-    session.set("memory", { messages: [] });
+    session.set(SESSION_MEMORY_KEY, { messages: [] });
     return json(
       { result: "", memory: [] },
       {
@@ -40,8 +42,8 @@ export async function action({ request }) {
     );
   } else {
     let existingMemory = [];
-    if (session.has("memory")) {
-      existingMemory = session.get("memory");
+    if (session.has(SESSION_MEMORY_KEY)) {
+      existingMemory = session.get(SESSION_MEMORY_KEY);
     }
 
     const model = new OpenAI({
@@ -64,7 +66,7 @@ export async function action({ request }) {
 
     const res = await chain.call({ input });
 
-    session.set("memory", memory.chatHistory);
+    session.set(SESSION_MEMORY_KEY, memory.chatHistory);
 
     return json(
       { result: res?.response, memory: memory.chatHistory },

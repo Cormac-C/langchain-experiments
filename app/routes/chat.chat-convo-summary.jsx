@@ -15,11 +15,13 @@ import { LLMChain } from "langchain/chains";
 
 // Source: https://js.langchain.com/docs/modules/memory/examples/conversation_summary
 
+const SESSION_MEMORY_KEY = "memory-2";
+
 export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
   let existingMemory = [];
-  if (session.has("memory-2")) {
-    existingMemory = session.get("memory-2");
+  if (session.has(SESSION_MEMORY_KEY)) {
+    existingMemory = session.get(SESSION_MEMORY_KEY);
   }
   return json({ memory: existingMemory });
 }
@@ -28,7 +30,7 @@ export async function action({ request }) {
   const formData = await request.formData();
   const session = await getSession(request.headers.get("Cookie"));
   if (formData.get("intent") === "clear") {
-    session.set("memory-2", { chat_history: "" });
+    session.set(SESSION_MEMORY_KEY, { chat_history: "" });
     return json(
       { return: "", memory: "" },
       {
@@ -39,8 +41,8 @@ export async function action({ request }) {
     );
   } else {
     let existingMemory = "";
-    if (session.has("memory-2")) {
-      existingMemory = session.get("memory-2");
+    if (session.has(SESSION_MEMORY_KEY)) {
+      existingMemory = session.get(SESSION_MEMORY_KEY);
     }
 
     const chatHistory = existingMemory?.text || "";
@@ -102,7 +104,7 @@ export async function action({ request }) {
       new_lines: res?.text,
     });
 
-    session.set("memory-2", memorySummary);
+    session.set(SESSION_MEMORY_KEY, memorySummary);
 
     return json(
       { result: res?.text, memory: memorySummary },

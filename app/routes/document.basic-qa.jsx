@@ -14,15 +14,18 @@ import { getSession, commitSession } from "../sessions";
 
 // Source: https://js.langchain.com/docs/modules/chains/index_related_chains/retrieval_qa
 
+const SESSION_EMBEDDINGS_KEY = "doc-embeddings";
+const SESSION_MEMORY_KEY = "memory-3";
+
 export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
   let embeddings = [];
   let sessionData = {};
-  if (session.has("doc-embeddings")) {
-    embeddings = session.get("doc-embeddings");
+  if (session.has(SESSION_EMBEDDINGS_KEY)) {
+    embeddings = session.get(SESSION_EMBEDDINGS_KEY);
   }
-  if (session.has("memory-3")) {
-    sessionData = session.get("memory-3");
+  if (session.has(SESSION_MEMORY_KEY)) {
+    sessionData = session.get(SESSION_MEMORY_KEY);
   }
   return json({ sessionData: sessionData, currentEmbeddings: embeddings });
 }
@@ -55,7 +58,7 @@ export async function action({ request }) {
     result: res?.text,
   };
 
-  session.set("memory-3", sessionInfo);
+  session.set(SESSION_MEMORY_KEY, sessionInfo);
 
   return json(
     { result: res?.text },

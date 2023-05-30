@@ -14,11 +14,13 @@ import { UnstructuredLoader } from "langchain/document_loaders/fs/unstructured";
 
 import { getSession, commitSession } from "../sessions";
 
+const SESSION_EMBEDDINGS_KEY = "doc-embeddings";
+
 export async function loader({ request }) {
   const session = await getSession(request.headers.get("Cookie"));
   let embeddings = [];
-  if (session.has("doc-embeddings")) {
-    embeddings = session.get("doc-embeddings");
+  if (session.has(SESSION_EMBEDDINGS_KEY)) {
+    embeddings = session.get(SESSION_EMBEDDINGS_KEY);
   }
   return json({ currentEmbeddings: embeddings });
 }
@@ -70,13 +72,13 @@ export async function action({ request }) {
     let vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
     await vectorStore.save(directory);
-    let currentEmbeddings = session.get("doc-embeddings") || [];
+    let currentEmbeddings = session.get(SESSION_EMBEDDINGS_KEY) || [];
     const embeddingData = {
       name: slicedFileName,
       directory: directory,
     };
     currentEmbeddings.push(embeddingData);
-    session.set("doc-embeddings", currentEmbeddings);
+    session.set(SESSION_EMBEDDINGS_KEY, currentEmbeddings);
     return json(
       {
         result: "New vector store created.",
