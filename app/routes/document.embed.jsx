@@ -10,6 +10,7 @@ import * as fs from "fs";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
+import { UnstructuredLoader } from "langchain/document_loaders/fs/unstructured";
 
 import { getSession, commitSession } from "../sessions";
 
@@ -50,15 +51,23 @@ export async function action({ request }) {
     const directory =
       process.env.HOME + "/langchain-exp/app/sessions/" + slicedFileName;
 
-    //Need to create the vector store
-    const text = fs.readFileSync(file.filepath, "utf8");
-    const textSplitter = new RecursiveCharacterTextSplitter({
-      chunkSize: 1000,
-    });
-    const docs = await textSplitter.createDocuments([text]);
+    let docs;
+
+    if (file.type === "text/plain") {
+      const text = fs.readFileSync(file.filepath, "utf8");
+      const textSplitter = new RecursiveCharacterTextSplitter({
+        chunkSize: 1000,
+      });
+      docs = await textSplitter.createDocuments([text]);
+    } else {
+      const loader = new UnstructuredLoader(file.filepath);
+      docs = await loader.load();
+    }
+
+    docs = docs.filter((doc) => !!doc.pageContent);
 
     // In-memory vector store https://www.npmjs.com/package/hnswlib-node
-    vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
+    let vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
     await vectorStore.save(directory);
     let currentEmbeddings = session.get("doc-embeddings") || [];
@@ -108,7 +117,12 @@ export default function DocumentEmbedForm() {
           >
             File
           </label>
-          <input type="file" name="file" accept=".txt" required />
+          <input
+            type="file"
+            name="file"
+            accept=".txt, .pdf, .doc, .docx, .html"
+            required
+          />
         </div>
         <button
           disabled={showLoading}
