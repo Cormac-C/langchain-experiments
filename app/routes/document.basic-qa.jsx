@@ -41,7 +41,9 @@ export async function action({ request }) {
     new OpenAIEmbeddings()
   );
 
-  const chain = RetrievalQAChain.fromLLM(chatModel, vectorStore.asRetriever());
+  const chain = RetrievalQAChain.fromLLM(chatModel, vectorStore.asRetriever(), {
+    // returnSourceDocuments: true, // Uncomment to return source documents
+  });
 
   const res = await chain.call({
     query: question,
@@ -86,13 +88,8 @@ export default function DocumentQAForm() {
   return (
     <div>
       <h2 className="pb-4 text-xl">Document Q&A</h2>
-      <h2 className="text-xl">Upload a file, enter a question.</h2>
-      <Form
-        method="post"
-        className="space-y-6 py-4"
-        encType="multipart/form-data"
-        initial
-      >
+      <h2 className="text-xl">Pick a file, enter a question.</h2>
+      <Form method="post" className="space-y-6 py-4">
         <div>
           <label
             htmlFor="document"
