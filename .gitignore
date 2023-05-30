@@ -10,3 +10,5 @@ node_modules
 /prisma/data.db-journal
 
 /app/sessions
+
+.DS_Store

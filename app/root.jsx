@@ -1,6 +1,5 @@
 import { cssBundleHref } from "@remix-run/css-bundle";
 
-import { json } from "@remix-run/node";
 import {
   Links,
   LiveReload,

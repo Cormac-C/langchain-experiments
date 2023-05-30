@@ -136,7 +136,11 @@ export default function DocumentQAForm() {
   const showLoading =
     navigation.state === "submitting" || navigation.state === "loading";
 
-  const data = useActionData() || useLoaderData().sessionData;
+  const actionData = useActionData();
+  const loaderData = useLoaderData();
+
+  const data = actionData || loaderData;
+
   let formattedResult = data?.result;
   if (formattedResult) {
     formattedResult = formattedResult.trim();

@@ -85,7 +85,11 @@ export default function StatefulLLMForm() {
   const showLoading =
     navigation.state === "submitting" || navigation.state === "loading";
 
-  const data = useActionData() || useLoaderData();
+  const actionData = useActionData();
+  const loaderData = useLoaderData();
+
+  const data = actionData || loaderData;
+
   const memory = data?.memory;
   let conversationArray = [];
   if (memory?.messages) {
@@ -127,8 +131,10 @@ export default function StatefulLLMForm() {
         className="mt-1 max-h-64 min-h-[8rem] w-full overflow-y-scroll rounded border border-gray-500 bg-blue-200 px-2 py-1 text-lg"
         ref={outputRef}
       >
-        {conversationArray.map((message) => {
-          return <div dangerouslySetInnerHTML={{ __html: message }} />;
+        {conversationArray.map((message, index) => {
+          return (
+            <div key={index} dangerouslySetInnerHTML={{ __html: message }} />
+          );
         })}
       </div>
       <Form method="post" className="space-y-6 py-4" ref={formRef}>

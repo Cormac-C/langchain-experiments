@@ -123,7 +123,10 @@ export default function ChatSummaryForm() {
   const showLoading =
     navigation.state === "submitting" || navigation.state === "loading";
 
-  const data = useActionData() || useLoaderData();
+  const actionData = useActionData();
+  const loaderData = useLoaderData();
+
+  const data = actionData || loaderData;
 
   const output = data?.result;
 
