@@ -140,8 +140,8 @@ export default function DocumentEmbedForm() {
           </tr>
         </thead>
         <tbody>
-          {currentEmbeddings?.map((embedding) => (
-            <tr>
+          {currentEmbeddings?.map((embedding, index) => (
+            <tr key={index}>
               <td className="border px-4 py-2">{embedding.name}</td>
               <td className="border px-4 py-2">{embedding.directory}</td>
             </tr>

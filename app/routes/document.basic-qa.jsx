@@ -36,7 +36,10 @@ export async function action({ request }) {
 
   const chatModel = new ChatOpenAI();
 
-  vectorStore = await HNSWLib.load(embeddingDirectory, new OpenAIEmbeddings());
+  let vectorStore = await HNSWLib.load(
+    embeddingDirectory,
+    new OpenAIEmbeddings()
+  );
 
   const chain = RetrievalQAChain.fromLLM(chatModel, vectorStore.asRetriever());
 
