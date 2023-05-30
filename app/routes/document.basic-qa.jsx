@@ -109,6 +109,12 @@ export default function DocumentQAForm() {
               </option>
             ))}
           </select>
+          <Link
+            to="/document/embed"
+            className="text-gray-500 hover:text-gray-700"
+          >
+            Create more embeddings
+          </Link>
         </div>
         <div>
           <label
