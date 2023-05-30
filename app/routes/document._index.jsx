@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 
+export const meta = () => [{ title: "Documents" }];
+
 export default function DocumentOptions() {
   return (
     <div>

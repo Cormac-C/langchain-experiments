@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 
+export const meta = () => [{ title: "Chatbots" }];
+
 export default function ChatOptions() {
   return (
     <div>

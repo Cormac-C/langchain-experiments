@@ -162,7 +162,7 @@ export default function DocumentQAChatForm() {
           <select
             id="document"
             name="document"
-            className="w-full"
+            className="w-full rounded border border-gray-500 bg-red-100 p-2"
             defaultValue={directory || ""}
           >
             {availableEmbeddings.map((embedding, index) => (

@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 
+export const meta = () => [{ title: "Agents" }];
+
 export default function AgentOptions() {
   return (
     <div>

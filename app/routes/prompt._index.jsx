@@ -1,5 +1,7 @@
 import { Link } from "@remix-run/react";
 
+export const meta = () => [{ title: "Prompts" }];
+
 export default function PromptOptions() {
   return (
     <div>
