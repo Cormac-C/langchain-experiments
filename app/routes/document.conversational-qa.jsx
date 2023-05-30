@@ -16,6 +16,8 @@ import { ConversationalRetrievalQAChain } from "langchain/chains";
 import { getSession, commitSession } from "../sessions";
 import { AIChatMessage, HumanChatMessage } from "langchain/schema";
 
+// Source: https://js.langchain.com/docs/modules/chains/index_related_chains/conversational_retrieval
+
 const SESSION_EMBEDDINGS_KEY = "doc-embeddings";
 const SESSION_MEMORY_KEY = "memory-4";
 
@@ -124,7 +126,7 @@ export default function DocumentQAChatForm() {
   let conversationArray = [];
   if (memory?.messages) {
     conversationArray = memory.messages.map((message) => {
-      const styling = message.type === "human" ? "black" : "blue";
+      const styling = message.type === "human" ? "black" : "red";
       return `
       <span style="color: ${styling}">
         ${message.type}: ${message.data.content.trim()}

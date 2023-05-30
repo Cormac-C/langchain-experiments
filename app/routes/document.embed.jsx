@@ -14,6 +14,10 @@ import { UnstructuredLoader } from "langchain/document_loaders/fs/unstructured";
 
 import { getSession, commitSession } from "../sessions";
 
+// Source: https://js.langchain.com/docs/modules/models/embeddings/integrations
+
+// Possible TODO: Give a url, navigate to it, create and save an embedding of the web page content
+
 const SESSION_EMBEDDINGS_KEY = "doc-embeddings";
 
 export async function loader({ request }) {
@@ -56,12 +60,15 @@ export async function action({ request }) {
     let docs;
 
     if (file.type === "text/plain") {
+      // No api needed for text files, just split into chunks
       const text = fs.readFileSync(file.filepath, "utf8");
       const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000,
       });
       docs = await textSplitter.createDocuments([text]);
     } else {
+      // API to parse other doc types
+      // https://github.com/Unstructured-IO/unstructured-api
       const loader = new UnstructuredLoader(file.filepath);
       docs = await loader.load();
     }
@@ -72,6 +79,7 @@ export async function action({ request }) {
     let vectorStore = await HNSWLib.fromDocuments(docs, new OpenAIEmbeddings());
 
     await vectorStore.save(directory);
+
     let currentEmbeddings = session.get(SESSION_EMBEDDINGS_KEY) || [];
     const embeddingData = {
       name: slicedFileName,
@@ -79,6 +87,7 @@ export async function action({ request }) {
     };
     currentEmbeddings.push(embeddingData);
     session.set(SESSION_EMBEDDINGS_KEY, currentEmbeddings);
+
     return json(
       {
         result: "New vector store created.",

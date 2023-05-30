@@ -45,7 +45,7 @@ export async function action({ request }) {
   );
 
   const chain = RetrievalQAChain.fromLLM(chatModel, vectorStore.asRetriever(), {
-    // returnSourceDocuments: true, // Uncomment to return source documents
+    // returnSourceDocuments: true, // Uncomment to return source 'documents' (chunks of text)
   });
 
   const res = await chain.call({
