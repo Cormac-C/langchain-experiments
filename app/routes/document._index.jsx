@@ -11,6 +11,14 @@ export default function DocumentOptions() {
           <li>
             <Link
               className="text-red-700 hover:text-red-500"
+              to="/document/embed"
+            >
+              • Document Embedding
+            </Link>
+          </li>
+          <li>
+            <Link
+              className="text-red-700 hover:text-red-500"
               to="/document/basic-qa"
             >
               • Document QA
