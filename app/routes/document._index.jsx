@@ -8,6 +8,17 @@ export default function DocumentOptions() {
   return (
     <div>
       <div className="py-4">
+        <div className="text-md pb-4">
+          Upload documents to create embeddings then interact with them via Q&A.
+          ref:{" "}
+          <a
+            className="text-red-800 hover:text-red-500"
+            href="https://docs.langchain.com/docs/use-cases/qa-docs"
+            target="_blank"
+          >
+            Langchain's Chat Models
+          </a>
+        </div>
         <h1 className="pb-4 text-lg">Choose a document tool:</h1>
         <ul className="space-y-4">
           <li>

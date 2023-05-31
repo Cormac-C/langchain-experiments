@@ -8,14 +8,26 @@ export default function AgentOptions() {
       <div className="py-4">
         <div className="text-md pb-4">
           These agents are LLMs with access to two tools{" "}
-          <a href="https://serpapi.com/">serpapi</a> (Google search) and a{" "}
-          <a href="https://js.langchain.com/docs/api/tools_calculator/classes/Calculator">
+          <a
+            className="text-green-800 hover:text-green-500"
+            href="https://serpapi.com/"
+            target="_blank"
+          >
+            serpapi
+          </a>{" "}
+          (Google search) and a{" "}
+          <a
+            className="text-green-800 hover:text-green-500"
+            href="https://js.langchain.com/docs/api/tools_calculator/classes/Calculator"
+            target="_blank"
+          >
             calculator
           </a>
           . ref:{" "}
           <a
             className="text-green-800 hover:text-green-500"
             href="https://js.langchain.com/docs/modules/agents/"
+            target="_blank"
           >
             Langchain's Agents
           </a>

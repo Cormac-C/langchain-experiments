@@ -21,14 +21,11 @@ export async function action({ request }) {
   ];
   const executor = await initializeAgentExecutorWithOptions(tools, model, {
     agentType: "zero-shot-react-description",
+    // verbose: true, // Uncomment to see more logs
   });
-  console.log("Loaded agent");
   const formData = await request.formData();
-  console.log("Got form data");
   const question = formData.get("question");
-  console.log("Got question: ", question);
   const res = await executor.call({ input: question });
-  console.log("Got result: ", res);
   return json({ result: res?.output });
 }
 
@@ -46,7 +43,10 @@ export default function SearchActionAgentForm() {
   return (
     <div>
       <h2 className="pb-4 text-xl">Search-enabled action agent</h2>
-      <h2 className="pb-4 text-xl">Enter a question.</h2>
+      <h2 className="pb-4 text-xl">
+        Enter a question for a Davinci based action agent to answer using search
+        results (and a calculator).
+      </h2>
       <Form method="post" className="space-y-6 py-4">
         <div>
           <label

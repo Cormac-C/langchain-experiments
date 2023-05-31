@@ -12,6 +12,7 @@ export default function PromptOptions() {
           <a
             className="text-purple-800 hover:text-purple-500"
             href="https://js.langchain.com/docs/modules/chains/llm_chain"
+            target="_blank"
           >
             Langchain's LLMChains
           </a>
