@@ -1,8 +1,6 @@
 import { json } from "@remix-run/node";
 import { Form, Link, useNavigation, useActionData } from "@remix-run/react";
-import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { ReadFileTool, WriteFileTool, SerpAPI } from "langchain/tools";
-import { InMemoryFileStore } from "langchain/stores/file/in_memory";
 import { NodeFileStore } from "langchain/stores/file/node";
 import { AutoGPT } from "langchain/experimental/autogpt";
 import { HNSWLib } from "langchain/vectorstores/hnswlib";
@@ -12,33 +10,32 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 //Source: https://js.langchain.com/docs/use_cases/autonomous_agents/auto_gpt
 // Doesn't work currently, can't seem to write to the file store
 // Never reaches an end
-// const store = new InMemoryFileStore();
-const store = new NodeFileStore(
-  process.env.HOME + "/langchain-exp/app/sessions"
-);
-
-const tools = [
-  new ReadFileTool({ store }),
-  new WriteFileTool({ store }),
-  new SerpAPI(process.env.SERPAPI_API_KEY, {
-    location: "Montreal,Quebec,Canada",
-    gl: "ca",
-    hl: "en",
-  }),
-];
-
-const vectorStore = new HNSWLib(new OpenAIEmbeddings(), {
-  space: "cosine",
-  numDimensions: 1536,
-});
-
-const autogpt = AutoGPT.fromLLMAndTools(new ChatOpenAI(), tools, {
-  memory: vectorStore.asRetriever(),
-  aiName: "Tom",
-  aiRole: "Assistant",
-});
 
 export async function action({ request }) {
+  const store = new NodeFileStore(
+    process.env.HOME + "/langchain-exp/app/sessions"
+  );
+
+  const tools = [
+    new ReadFileTool({ store }),
+    new WriteFileTool({ store }),
+    new SerpAPI(process.env.SERPAPI_API_KEY, {
+      location: "Montreal,Quebec,Canada",
+      gl: "ca",
+      hl: "en",
+    }),
+  ];
+
+  const vectorStore = new HNSWLib(new OpenAIEmbeddings(), {
+    space: "cosine",
+    numDimensions: 1536,
+  });
+
+  const autogpt = AutoGPT.fromLLMAndTools(new ChatOpenAI(), tools, {
+    memory: vectorStore.asRetriever(),
+    aiName: "Tom",
+    aiRole: "Assistant",
+  });
   const formData = await request.formData();
 
   const input = formData.get("input");

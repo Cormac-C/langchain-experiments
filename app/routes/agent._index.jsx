@@ -38,6 +38,14 @@ export default function AgentOptions() {
               • Search-enabled plan and execute agent
             </Link>
           </li>
+          <li>
+            <Link
+              className="text-green-700 hover:text-green-500"
+              to="/agent/auto-gpt"
+            >
+              • AutoGPT (* not working yet *)
+            </Link>
+          </li>
         </ul>
       </div>
       <Link
