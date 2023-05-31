@@ -15,6 +15,7 @@ export default function DocumentOptions() {
             className="text-red-800 hover:text-red-500"
             href="https://docs.langchain.com/docs/use-cases/qa-docs"
             target="_blank"
+            rel="noreferrer"
           >
             Langchain's Chat Models
           </a>

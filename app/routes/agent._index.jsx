@@ -12,6 +12,7 @@ export default function AgentOptions() {
             className="text-green-800 hover:text-green-500"
             href="https://serpapi.com/"
             target="_blank"
+            rel="noreferrer"
           >
             serpapi
           </a>{" "}
@@ -20,6 +21,7 @@ export default function AgentOptions() {
             className="text-green-800 hover:text-green-500"
             href="https://js.langchain.com/docs/api/tools_calculator/classes/Calculator"
             target="_blank"
+            rel="noreferrer"
           >
             calculator
           </a>
@@ -28,6 +30,7 @@ export default function AgentOptions() {
             className="text-green-800 hover:text-green-500"
             href="https://js.langchain.com/docs/modules/agents/"
             target="_blank"
+            rel="noreferrer"
           >
             Langchain's Agents
           </a>

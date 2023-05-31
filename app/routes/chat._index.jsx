@@ -12,6 +12,7 @@ export default function ChatOptions() {
             className="text-blue-800 hover:text-blue-500"
             href="https://js.langchain.com/docs/modules/models/chat/"
             target="_blank"
+            rel="noreferrer"
           >
             Langchain's Chat Models
           </a>
