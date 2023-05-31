@@ -36,6 +36,14 @@ export default function PromptOptions() {
               • Translate
             </Link>
           </li>
+          <li>
+            <Link
+              className="text-purple-700 hover:text-purple-500"
+              to="/prompt/weather"
+            >
+              • Weather API
+            </Link>
+          </li>
         </ul>
       </div>
       <Link
