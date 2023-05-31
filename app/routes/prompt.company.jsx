@@ -7,8 +7,14 @@ import { LLMChain } from "langchain/chains";
 // Source: https://js.langchain.com/docs/modules/chains/llm_chain
 
 export async function action({ request }) {
+  const formData = await request.formData();
+  const product = formData.get("product");
+
+  const temperature = formData.get("temperature") || 0.7;
+  const temperatureFloat = parseFloat(temperature);
+
   const model = new OpenAI({
-    temperature: 0.7,
+    temperature: temperatureFloat,
   });
 
   const template =
@@ -19,9 +25,6 @@ export async function action({ request }) {
   });
 
   const chain = new LLMChain({ llm: model, prompt: prompt });
-
-  const formData = await request.formData();
-  const product = formData.get("product");
 
   const res = await chain.call({ product });
 
@@ -61,6 +64,26 @@ export default function CompanyPromptForm() {
               name="product"
               type="text"
               className="bg-whitepx-2 w-full rounded border border-gray-500 bg-[color:rgba(209,190,230,0.9)] py-1 text-lg"
+            />
+          </div>
+        </div>
+        <div>
+          <label
+            htmlFor="temperature"
+            className="block text-sm font-medium text-gray-700"
+          >
+            Temperature
+          </label>
+          <div className="mt-1">
+            <input
+              id="temperature"
+              name="temperature"
+              type="number"
+              min="0"
+              max="1"
+              step="0.1"
+              defaultValue="0.7"
+              className="w-full rounded border border-gray-500 bg-[color:rgba(209,190,230,0.9)] py-1"
             />
           </div>
         </div>

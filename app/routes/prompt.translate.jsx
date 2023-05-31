@@ -12,7 +12,7 @@ export async function action({ request }) {
   });
 
   const template =
-    "Translate the following phrase into {language}: ```{phrase}```. If you don't know the language, say so.";
+    "Translate the following phrase into {language}: ```{phrase}```.";
   const prompt = new PromptTemplate({
     template,
     inputVariables: ["language", "phrase"],
@@ -50,7 +50,10 @@ export default function CompanyPromptForm() {
           "```" +
           `{phrase}` +
           "```" +
-          `. If you don't know the language, say so.`}
+          `.`}
+      </div>
+      <div className="text-md pb-2 text-gray-700">
+        Using a temperature of 0 to attempt to maximize accuracy.
       </div>
       <Form method="post" className="space-y-6 py-4">
         <div>
