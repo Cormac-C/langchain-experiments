@@ -12,38 +12,39 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 // Never reaches an end
 
 export async function action({ request }) {
-  const store = new NodeFileStore(
-    process.env.HOME + "/langchain-exp/app/sessions"
-  );
+  // const store = new NodeFileStore(
+  //   process.env.HOME + "/langchain-exp/app/sessions"
+  // );
 
-  const tools = [
-    new ReadFileTool({ store }),
-    new WriteFileTool({ store }),
-    new SerpAPI(process.env.SERPAPI_API_KEY, {
-      location: "Montreal,Quebec,Canada",
-      gl: "ca",
-      hl: "en",
-    }),
-  ];
+  // const tools = [
+  //   new ReadFileTool({ store }),
+  //   new WriteFileTool({ store }),
+  //   new SerpAPI(process.env.SERPAPI_API_KEY, {
+  //     location: "Montreal,Quebec,Canada",
+  //     gl: "ca",
+  //     hl: "en",
+  //   }),
+  // ];
 
-  const vectorStore = new HNSWLib(new OpenAIEmbeddings(), {
-    space: "cosine",
-    numDimensions: 1536,
-  });
+  // const vectorStore = new HNSWLib(new OpenAIEmbeddings(), {
+  //   space: "cosine",
+  //   numDimensions: 1536,
+  // });
 
-  const autogpt = AutoGPT.fromLLMAndTools(new ChatOpenAI(), tools, {
-    memory: vectorStore.asRetriever(),
-    aiName: "Tom",
-    aiRole: "Assistant",
-  });
-  const formData = await request.formData();
+  // const autogpt = AutoGPT.fromLLMAndTools(new ChatOpenAI(), tools, {
+  //   memory: vectorStore.asRetriever(),
+  //   aiName: "Tom",
+  //   aiRole: "Assistant",
+  // });
+  // const formData = await request.formData();
 
-  const input = formData.get("input");
+  // const input = formData.get("input");
 
-  const res = await autogpt.run([input]);
-  console.log("Got result: ", res);
+  // const res = await autogpt.run([input]);
+  // console.log("Got result: ", res);
 
-  return json({ result: res?.output });
+  // return json({ result: res?.output });
+  return json({ result: "Not stably implemented" });
 }
 
 export default function AutoGPTForm() {
