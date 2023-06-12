@@ -55,7 +55,7 @@ export async function action({ request }) {
     const fileName = file.name;
     const slicedFileName = fileName.slice(0, fileName.length - 4);
     const directory =
-      process.env.HOME + "/langchain-exp/app/sessions/" + slicedFileName;
+      process.env.HOME_PATH + "/langchain-exp/app/sessions/" + slicedFileName;
 
     let docs;
 
