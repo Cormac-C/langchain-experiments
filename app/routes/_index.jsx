@@ -26,10 +26,10 @@ export default function Index() {
                     Try a prompt
                   </Link>
                 </div>
-                <div className="space-y-4 sm:mx-auto sm:space-y-0">
+                <div className="pointer-events-none space-y-4 sm:mx-auto sm:space-y-0">
                   <Link
                     to="/agent"
-                    className="flex items-center justify-center rounded-md border border-green-400 bg-white px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-50 sm:px-8"
+                    className="flex items-center justify-center rounded-md border border-green-400 bg-gray-200 px-4 py-3 text-base font-medium text-green-700 shadow-sm hover:bg-green-50 sm:px-8"
                   >
                     Try an agent
                   </Link>
