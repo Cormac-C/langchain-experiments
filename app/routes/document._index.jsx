@@ -17,7 +17,7 @@ export default function DocumentOptions() {
             target="_blank"
             rel="noreferrer"
           >
-            Langchain's Chat Models
+            Langchain's Document Search
           </a>
         </div>
         <h1 className="pb-4 text-lg">Choose a document tool:</h1>
