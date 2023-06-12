@@ -1,6 +1,7 @@
 import { createCookie, createFileSessionStorage } from "@remix-run/node";
 
 const sessionCookie = createCookie("__session", {
+  secrets: [process.env.SESSION_SECRET],
   sameSite: true,
 });
 
